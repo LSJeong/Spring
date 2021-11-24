@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- DBCP Pool -->
+<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+	<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+	<property name="username" value="lsj" />
+	<property name="password" value="1234" />
+</bean>
+
+<!-- Mybatis -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="configLocation" value="classpath:config/mybatis-config.xml" />  <!-- classpath:는 src/main/resources -->
+	<property name="mapperLocations" value="classpath*:co/lsj/hello/**/*Impl/*map-xml" />  <!-- classpath*: 는 src/main/java범위에서 -->
+	<!-- <property name="mapperLocations" value="classpath:mapper/*map-xml" /> 이렇게 해도 되지만 resources폴더밑에 mapper만들고 해야함-->
+</bean>
+
+
+
+<bean id="sqlsession" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg ref="sqlSessionFactory"></constructor-arg>
+	
+</bean>
+
+<mybatis-spring:scan base-package="co.lsj.hello"/>
+
+</beans>
