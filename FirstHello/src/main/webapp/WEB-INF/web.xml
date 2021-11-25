@@ -32,7 +32,8 @@
 		<url-pattern>*.do</url-pattern>
 		<!-- *.do 안탈꺼면 / 로 놔둬도 되지만 /*, *은 안된다 -->
 	</servlet-mapping>
-
+	
+	<!-- 한글설정 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

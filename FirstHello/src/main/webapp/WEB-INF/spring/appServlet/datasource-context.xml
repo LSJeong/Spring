@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <!-- DBCP Pool -->
-<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"> <!-- destroy-method="close": 프로그램 종료될때 연결 끊어라, 안적어도 상관없다 -->
 	<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
 	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
 	<property name="username" value="lsj" />
@@ -17,17 +17,19 @@
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	<property name="dataSource" ref="dataSource"></property>
 	<property name="configLocation" value="classpath:config/mybatis-config.xml" />  <!-- classpath:는 src/main/resources -->
-	<property name="mapperLocations" value="classpath*:co/lsj/hello/**/*Impl/*map-xml" />  <!-- classpath*: 는 src/main/java범위에서 -->
-	<!-- <property name="mapperLocations" value="classpath:mapper/*map-xml" /> 이렇게 해도 되지만 resources폴더밑에 mapper만들고 해야함-->
+	<property name="mapperLocations" value="classpath*:co/lsj/hello/**/service/*-map.xml" />  <!-- classpath*: 는 src/main/java범위에서! 경로는 자기맘대로 바꿀수있다-->
+	<!-- <property name="mapperLocations" value="classpath:mapper/*-map.xml" /> 이렇게 해도 되지만 resources폴더밑에 mapper만들고 해야함-->
 </bean>
 
 
 
 <bean id="sqlsession" class="org.mybatis.spring.SqlSessionTemplate">
-	<constructor-arg ref="sqlSessionFactory"></constructor-arg>
+	<constructor-arg ref="sqlSessionFactory" />
 	
 </bean>
 
+
+<!-- "classpath*:co/lsj/hello/**/*Impl/*-map.xml" 이게 실행되기 위해 scan 해야함 -->
 <mybatis-spring:scan base-package="co.lsj.hello"/>
 
 </beans>
